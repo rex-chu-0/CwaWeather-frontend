@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>森森天氣</title>
+    <title>魔法天氣</title>
     <link rel="icon" type="image/png" href="./icon-v2.png">
     <link rel="apple-touch-icon" href="./icon-v2.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./icon-v2.png">
@@ -15,65 +15,60 @@
 
     <style>
         :root {
-            --ac-green: #7DE1A9;
-            --ac-bg-pattern: #8FD8AF;
-            --ac-cream: #FFFEF2;
-            --ac-yellow: #F9F195;
-            --ac-brown: #796452;
-            --ac-blue: #4FB5D9;
-            --ac-dark: #58504A;
-            --ac-card-border: #E6E0C8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            --magic-bg: #1a1033;
+            --magic-accent: #b283ff;
+            --magic-light: #e7d7ff;
+            --magic-card: #261544;
+            --magic-border: #caa6ff;
+            --magic-glow: rgba(202, 166, 255, 0.6);
         }
 
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: var(--ac-green);
-            /* 更細緻的斜紋背景 */
-            background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.2) 20px, rgba(255, 255, 255, 0.2) 40px);
+            background: radial-gradient(circle at top, #3a1a6f, #1a1033 60%);
+            color: var(--magic-light);
             min-height: 100vh;
-            color: var(--ac-dark);
-            /* 防止 iOS 左右滑動 */
             overflow-x: hidden;
             padding-bottom: 20px;
         }
 
-        /* 頂部狀態列 */
+        /* 魔法星光背景 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60');
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--magic-border);
         }
 
         .location-pill {
-            background: var(--ac-yellow);
-            color: var(--ac-brown);
-            padding: 5px 15px;
-            border-radius: 20px;
+            background: var(--magic-accent);
+            color: #2a1748;
+            padding: 6px 18px;
+            border-radius: 25px;
             font-weight: 900;
-            font-size: 1.1rem;
-            transform: rotate(-2deg);
             border: 2px solid white;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px var(--magic-glow);
         }
 
         .update-pill {
             font-size: 0.8rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.2);
+            color: var(--magic-light);
+            background: rgba(255, 255, 255, 0.1);
             padding: 4px 10px;
             border-radius: 12px;
         }
@@ -81,35 +76,33 @@
         .container {
             padding: 20px;
             max-width: 600px;
-            /* 限制在大手機寬度 */
             margin: 0 auto;
         }
 
-        /* === 核心：今日焦點卡片 === */
+        /* 魔法主卡片 */
         .hero-card {
-            background: var(--ac-cream);
-            border-radius: 35px;
-            padding: 30px 25px;
+            background: var(--magic-card);
+            border-radius: 30px;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: 4px solid white;
-            margin-bottom: 25px;
+            border: 3px solid var(--magic-border);
+            box-shadow: 0 0 20px var(--magic-glow);
             position: relative;
+            margin-bottom: 25px;
         }
 
-        /* 像動森的對話氣泡 */
         .hero-period {
             position: absolute;
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--ac-blue);
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
+            background: var(--magic-accent);
+            color: #2a1748;
+            padding: 6px 20px;
+            border-radius: 18px;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+            box-shadow: 0 0 8px var(--magic-glow);
         }
 
         .hero-temp-container {
@@ -122,76 +115,54 @@
 
         .hero-icon {
             font-size: 5rem;
-            filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.1));
-            animation: bounce 3s infinite;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
+            filter: drop-shadow(0 0 10px var(--magic-glow));
         }
 
         .hero-temp {
             font-size: 4.5rem;
             font-weight: 900;
-            color: var(--ac-brown);
-            line-height: 1;
+            color: var(--magic-light);
         }
 
         .hero-desc {
             font-size: 1.5rem;
-            color: #8A7B70;
             margin-bottom: 20px;
-            font-weight: bold;
         }
 
-        /* === 上班族最愛的：快速建議區 === */
+        /* 魔法建議區 */
         .advice-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px dashed #E0D8C0;
+            border-top: 1px dashed var(--magic-border);
         }
 
         .advice-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
             border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--magic-border);
+            box-shadow: 0 0 10px rgba(202, 166, 255, 0.2);
         }
 
         .advice-icon {
             font-size: 2rem;
-            margin-bottom: 5px;
         }
 
         .advice-text {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
-            color: var(--ac-brown);
-            margin: 5px 0;
-            line-height: 1.2;
         }
 
-        /* === 稍後預報：橫向滑動區 === */
         .section-title {
             font-size: 1.2rem;
-            color: white;
             margin-bottom: 15px;
             margin-left: 10px;
             font-weight: 900;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+            text-shadow: 0 0 6px var(--magic-glow);
         }
 
         .scroll-container {
@@ -199,9 +170,7 @@
             overflow-x: auto;
             gap: 15px;
             padding-bottom: 10px;
-            /* 隱藏滾動條但保留功能 */
             scrollbar-width: none;
-            -ms-overflow-style: none;
         }
 
         .scroll-container::-webkit-scrollbar {
@@ -210,50 +179,62 @@
 
         .mini-card {
             min-width: 140px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 25px;
             padding: 20px 15px;
             text-align: center;
-            border: 3px solid white;
-            flex-shrink: 0;
-            /* 防止被擠壓 */
+            border: 2px solid var(--magic-border);
+            box-shadow: 0 0 10px rgba(202, 166, 255, 0.2);
         }
 
         .mini-time {
-            background: var(--ac-green);
-            color: white;
+            background: var(--magic-accent);
+            color: #2a1748;
             padding: 3px 10px;
             border-radius: 10px;
             font-size: 0.8rem;
-            display: inline-block;
-            margin-bottom: 10px;
             font-weight: bold;
         }
 
         .mini-icon {
             font-size: 2.5rem;
-            margin: 5px 0;
         }
 
         .mini-temp {
             font-size: 1.2rem;
             font-weight: 800;
-            color: var(--ac-dark);
         }
 
-        /* Loading 畫面 */
+        /* Loading */
         .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--ac-green);
+            background: #1a1033;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 999;
+        }
+
+        .loading-screen div {
+            font-size: 4rem;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 5px var(--magic-glow));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 20px var(--magic-glow));
+            }
         }
     </style>
 </head>
@@ -264,7 +245,7 @@
         <p style="color: white; font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
     </div>
     <div class="status-bar">
-        <div class="location-pill">📍 高雄</div>
+        <div class="location-pill">📍 新北市</div>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
 
@@ -280,7 +261,7 @@
     </div>
 
     <script>
-        const API_URL = "https://cwa-backend-api.zeabur.app/api/weather/kaohsiung";
+        const API_URL = "https://hw4-wheather.zeabur.app/api/weather/newtaipei";
 
         function getWeatherIcon(weather) {
             if (!weather) return "🌤️";
